@@ -14,9 +14,8 @@
 <body>
   <h1>Markdown to LaTeX + Manual Image Downloads</h1>
 
-  <label><strong>Raw GitHub Markdown URL:</strong></label>
-  <input type="text" id="urlInput"
-    value="https://raw.githubusercontent.com/zedttxj/Image-Processing-Tool-with-Matlab/main/optional/README.md" />
+  <label><strong>Paste your Markdown here:</strong></label>
+  <textarea id="mdInput"># Example\n\nThis is a test. </textarea>
 
   <button id="convertBtn">Convert</button>
   <button id="downloadTexBtn">Download .tex</button>
@@ -32,7 +31,7 @@
   <script type="module">
     import { Pandoc } from "https://cdn.jsdelivr.net/npm/pandoc-wasm@0.0.2/+esm";
 
-    const urlInput = document.getElementById("urlInput");
+    const mdInput = document.getElementById("mdInput");
     const convertBtn = document.getElementById("convertBtn");
     const output = document.getElementById("latexOutput");
     const statusimage = document.getElementById("status_image");
@@ -194,19 +193,12 @@
         .replace(/\$==\$/g, '==');
     }
     convertBtn.onclick = async () => {
-      const url = urlInput.value.trim();
-      if (!url.startsWith("https://")) {
-        output.textContent = "❌ Invalid URL.";
-        return;
-      }
     
       imageLinksList.innerHTML = "";
     
       try {
         output.textContent = "📥 Fetching Markdown...";
-        const mdResponse = await fetch(url);
-        if (!mdResponse.ok) throw new Error("Failed to fetch markdown.");
-        const markdown = await mdResponse.text();
+        const markdown = mdInput;
     
         output.textContent = "🔄 Converting to LaTeX...";
         
