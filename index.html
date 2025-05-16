@@ -20,6 +20,12 @@
   <button id="convertBtn">Convert</button>
   <button id="downloadTexBtn">⬇️ Download .tex</button>
   <button id="downloadZipBtn">📦 Download LaTeX + Images ZIP</button>
+  <h3>🧪 tropicalToLatex() Function Editor</h3>
+  <textarea id="tropicalEditor" style="width: 100%; height: 200px; font-family: monospace;">
+  return input.replace(/↦/g, '\\mapsto ').replace(/Σ/g, '\\sum ');
+  </textarea>
+  <button id="applyTropicalBtn">Apply New tropicalToLatex()</button>
+
 
   <h2>🧪 LaTeX Output</h2>
   <pre id="latexOutput">Waiting...</pre>
@@ -57,124 +63,18 @@
     }
 
     // Same tropicalToLatex() as you already have (omit here for space)
-    function tropicalToLatex(unicodeStr) {
-      return unicodeStr
-        .replace(/\\_\\{[^}]*\\\}+/g, match => {
-            const inner = match.slice(4).replace(/\\\}/g, '');
-            return `_{${inner}}`;
-        })
-        .replace(/[₍₎μ𝜈νλ𝑥↦𝑦ƒ𝑎𝐴𝐵𝐶𝐷𝐸Σ𝐹𝐺𝐻𝐼𝐽𝐾𝐿𝑀𝑁𝑂𝑃𝑄𝑅𝑆𝑇𝑈𝑉𝑊𝑋𝑌𝑍∘₀₁ₐₕₖₗₘₙₚₜₛᵢⱼ₂₃₄₅₆₇₈₉⁰¹²³⁴⁵⁶⁷⁸⁹′⊙⨂⊕⊔∈≠+×*/^=_]{1}[0-9(,)\-₍₎μ𝜈νλ𝑥𝑦↦ƒ𝑎𝐴𝐵𝐶𝐷∘𝐸Σ𝐹𝐺𝐻𝐼𝐽𝐾𝐿𝑀𝑁𝑂𝑃𝑄𝑅𝑆𝑇𝑈𝑉𝑊𝑋𝑌𝑍₀₁ₕₐₖₗₘₙₚₜₛᵢⱼ₂₃₄₅₆₇₈₉⁰¹²³⁴⁵⁶⁷⁸⁹′⊙⨂⊕⊔∈≠+×*/^=_|]*/g, match => `$${match}$`)
-        .replace(/\{.*\$+.*\}/g, (match) => {
-          const inner = match.slice(1, -1).replace(/\$/g, '');  // remove outer braces and all $
-          return `{\$${inner}\$}`;  // wrap with exactly one pair of $
-        })
-        .replace(/[⁰¹²³⁴⁵⁶⁷⁸⁹]+/g, match => `^{${match}}`)
-        .replace(/[₀₁ₕₖₗₘₙₚₜₛᵢₐⱼ₂₃₄₅₆₇₈₉₍₎]{1}[₀₁ₕₖₗₘₙₚₜₛᵢⱼₐ₂₃₄₅₆₇₈₉₍,₎^\s]*/g, match => `_{${match}}`)
-        .replace(/\\textbar/g,'\\bar')
-        .replace(/\$.*[a-zA-Z]{4}.*\$/g, (match) => {
-          const inner = match.replace(/\$/g, '')
-          return inner;
-        })
-        .replace(/\\text[a-zA-Z]{2}[a-zA-Z]*\{[₍₎μ𝜈νλ𝑥𝑦ƒ𝑎𝐴↦𝐵𝐶∘𝐷𝐸𝐹𝐺𝐻𝐼𝐽𝐾𝐿𝑀Σ𝑁𝑂𝑃𝑄𝑅𝑆𝑇𝑈𝑉𝑊𝑋𝑌𝑍₀₁ₕₖₗₘₙₚₜₛᵢₐⱼ₂₃₄₅₆₇₈₉⁰¹²³⁴⁵⁶⁷⁸⁹′⊙⨂⊕⊔∈≠+×*/^=_]\}/g, (match) => {
-          const inner = match.replace(/\{.\}/g, match2 => '{$' + match2.charAt(1) + '$}');
-          return inner;
-        })
-        .replace(/\\bar/g,'\\textbar')
-        .replace(/\\textbf\{[\s₍₎()0-9,μ𝜈∘νλ𝑥𝑦ƒ𝑎𝐴𝐵𝐶𝐷𝐸𝐹↦𝐺𝐻𝐼𝐽𝐾𝐿𝑀𝑁𝑂𝑃𝑄𝑅𝑆𝑇𝑈𝑉𝑊Σ𝑋𝑌𝑍₀₁ₕₖₗₘₙₚₜₛᵢₐⱼ₂₃₄₅₆₇₈₉⁰¹²³⁴⁵⁶⁷⁸⁹′⊙⨂⊕⊔∈≠+×*/^=_|]+\}/g, (match) => {
-          const inner = match.slice(7);
-          return `$\\boldsymbol${inner}$`;
-        })
-        .replace(/μ/g, '\\mu ')
-        .replace(/𝜈/g, '\\nu ')
-        .replace(/ν/g, '\\nu ')
-        .replace(/λ/g, '\\lambda ')
-        .replace(/↦/g, '\\mapsto ')
-        .replace(/∘/g, '\\circ ')
-        .replace(/Σ/g, '\\sum ')
-        .replace(/𝑎/g, 'a')
-        .replace(/ₐ/g, 'a')
-        .replace(/𝐴/g, 'A')
-        .replace(/𝐵/g, 'B')
-        .replace(/𝐶/g, 'C')
-        .replace(/𝐷/g, 'D')
-        .replace(/𝐸/g, 'E')
-        .replace(/𝐹/g, 'F')
-        .replace(/𝐺/g, 'G')
-        .replace(/𝐻/g, 'H')
-        .replace(/𝐼/g, 'I')
-        .replace(/𝐽/g, 'J')
-        .replace(/𝐾/g, 'K')
-        .replace(/𝐿/g, 'L')
-        .replace(/𝑀/g, 'M')
-        .replace(/𝑁/g, 'N')
-        .replace(/𝑂/g, 'O')
-        .replace(/𝑃/g, 'P')
-        .replace(/𝑄/g, 'Q')
-        .replace(/𝑅/g, 'R')
-        .replace(/𝑆/g, 'S')
-        .replace(/𝑇/g, 'T')
-        .replace(/𝑈/g, 'U')
-        .replace(/𝑉/g, 'V')
-        .replace(/𝑊/g, 'W')
-        .replace(/𝑋/g, 'X')
-        .replace(/𝑌/g, 'Y')
-        .replace(/𝑍/g, 'Z')
-        .replace(/ₕ/g, 'h')
-        .replace(/ₖ/g, 'k')
-        .replace(/ᵢ/g, 'i')
-        .replace(/ⱼ/g, 'j')
-        .replace(/ₗ/g, 'l')
-        .replace(/ₘ/g, 'm')
-        .replace(/ₙ/g, 'n')
-        .replace(/ₚ/g, 'p')
-        .replace(/ₜ/g, 't')
-        .replace(/ₛ/g, 's')
-        .replace(/₀/g, '0')
-        .replace(/₁/g, '1')
-        .replace(/₂/g, '2')
-        .replace(/₃/g, '3')
-        .replace(/₄/g, '4')
-        .replace(/₅/g, '5')
-        .replace(/₆/g, '6')
-        .replace(/₇/g, '7')
-        .replace(/₈/g, '8')
-        .replace(/₉/g, '9')
-        .replace(/₍/g, '(')
-        .replace(/₎/g, ')')
-        .replace(/ƒ/g, 'f')
-        .replace(/𝑥/g, 'x')
-        .replace(/𝑦/g, 'y')
-        .replace(/′/g, '^\\prime ')
-        .replace(/⊙/g, '\\odot ')
-        .replace(/⨂/g, '\\otimes ')
-        .replace(/⊕/g, '\\oplus ')
-        .replace(/⊔/g, '\\sqcup ')
-        .replace(/∈/g, '\\in ')
-        .replace(/≠/g, '\\neq ')
-        .replace(/×/g, '\\times')
-        .replace(/⁰/g, '0')
-        .replace(/¹/g, '1')
-        .replace(/²/g, '2')
-        .replace(/³/g, '3')
-        .replace(/⁴/g, '4')
-        .replace(/⁵/g, '5')
-        .replace(/⁶/g, '6')
-        .replace(/⁷/g, '7')
-        .replace(/⁸/g, '8')
-        .replace(/⁹/g, '9')
-        .replace(/ᵀ/g, 'T')
-        .replace(/\$.{1}\$/g, match => {
-          const inner = match.slice(1, -1);
-          return inner;
-        })
-        .replace(/\\text[a-zA-Z]{2}[a-zA-Z]*\{[+*/^=_]\}/g, (match) => {
-          const inner = match.replace(/\{.\}/g, match2 => '{$' + match2.charAt(1) + '$}');
-          return inner;
-        })
-        .replace(/\\\$/g,'\$\\')
-        .replace(/\\\^\{\}/g,'^')
-        .replace(/\$==\$/g, '==');
-    }
+    let tropicalToLatex = (input) => input; // Default identity function
+
+    document.getElementById("applyTropicalBtn").onclick = () => {
+      const code = document.getElementById("tropicalEditor").value;
+      try {
+        tropicalToLatex = new Function("input", code);
+        alert("✅ tropicalToLatex() updated successfully.");
+      } catch (e) {
+        alert("❌ Error in tropicalToLatex: " + e.message);
+        console.error(e);
+      }
+    };
 
     convertBtn.onclick = async () => {
       const markdown = mdInput.value.trim();
