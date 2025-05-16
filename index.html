@@ -198,7 +198,7 @@
     
       try {
         output.textContent = "📥 Fetching Markdown...";
-        const markdown = mdInput;
+        const markdown = mdInput.value.trim();
     
         output.textContent = "🔄 Converting to LaTeX...";
         
