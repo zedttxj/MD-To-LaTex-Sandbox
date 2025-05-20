@@ -180,7 +180,7 @@
     }
 
     // Same tropicalToLatex() as you already have (omit here for space)
-    let tropicalToLatex = (input) => input; // Default identity function
+    let tropicalToLatex = new Function("input", document.getElementById("tropicalEditor").value); // Default identity function
 
     document.getElementById("applyTropicalBtn").onclick = () => {
       const code = document.getElementById("tropicalEditor").value;
